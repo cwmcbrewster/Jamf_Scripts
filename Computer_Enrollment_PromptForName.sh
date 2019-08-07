@@ -9,10 +9,10 @@ scutil --set LocalHostName $serialNumber
 scutil --set HostName $serialNumber
 
 # Get currently logged in user
-loggedInUser=`python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");'`
+loggedInUser=$( scutil <<< "show State:/Users/ConsoleUser" | awk '/Name :/ && ! /loginwindow/ { print $3 }' )
 
 # Only proceed if _mbsetupuser is logged in (used by Apple for setup screens)
-if [[ ! $loggedInUser = "_mbsetupuser" ]];then
+if [[ ! $loggedInUser = "_mbsetupuser" ]]; then
   echo "Logged in user is not _mbsetupuser. Exiting..."
   exit 0
 fi
