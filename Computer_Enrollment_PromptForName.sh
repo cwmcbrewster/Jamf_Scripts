@@ -32,7 +32,7 @@ end tell
 EOL)
 
 # Check to make sure $computerName is set
-if [[ -z $computerName ]];then
+if [[ -z $computerName ]]; then
   echo "Computer Name not set. Exiting..."
   exit 0
 fi
