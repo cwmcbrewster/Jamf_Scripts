@@ -1,13 +1,18 @@
 #!/bin/bash
 
+# You will want to customize this script for your environment starting at line 128.
+# Everything from 127 down is just an example from my environment. 
+
 # Variables
 
-launchAgentName='org.my.jamfHelperSplashScreen'
-launchAgentPath="/Library/LaunchAgents/${launchAgentName}.plist"
-
-jamfHelperPath='/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper'
+# Set these for your environment
 jamfHelperHeading='My Org'
 jamfHelperIconPath='/Library/Application\ Support/MyOrg/Logo.png'
+launchAgentName='org.my.jamfHelperSplashScreen'
+
+# You probably don't need to change these
+launchAgentPath="/Library/LaunchAgents/${launchAgentName}.plist"
+jamfHelperPath='/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper'
 
 # Functions
 
