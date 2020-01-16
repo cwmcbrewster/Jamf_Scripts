@@ -50,9 +50,9 @@ if [[ -z "$loggedInUser" ]]; then
     killall loginwindow
   fi
   if [[ ${osvers} -ge 15 ]]; then
-    killall loginwindow
-    killall loginwindow # macOS 10.15.0 needs a second login window restart for jamfHelper to stay present
-    #launchctl kickstart -k system/com.apple.loginwindow # kickstarting the login window works but is slower and results in runaway securityAgent processes in macOS 10.15.0
+    launchctl kickstart -k system/com.apple.loginwindow # kickstarting the login window results in a runaway SecurityAgent process in macOS 10.15.0 to 10.15.2
+    sleep 0.5
+    killall -9 SecurityAgent # kill the runaway SecurityAgent process
   fi
 fi
 }
