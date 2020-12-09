@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# You will want to customize this script for your environment starting at line 128.
-# Everything from 127 down is just an example from my environment. 
+# You will want to customize this script for your environment starting at line 132.
+# Everything from 132 down is just an example from my environment. 
 
 # Variables
 
@@ -46,13 +46,16 @@ if [[ -z "$loggedInUser" ]]; then
   
   # Kill/restart the loginwindow process to load the LaunchAgent
   echo "Ready to lock screen. Restarting loginwindow..."
-  if [[ ${osvers} -le 14 ]]; then
-    killall loginwindow
+  if [[ ${osversMajor} -eq 10 && ${osversMinor} -le 14 ]]; then
+    killall -HUP loginwindow
   fi
-  if [[ ${osvers} -ge 15 ]]; then
-    launchctl kickstart -k system/com.apple.loginwindow # kickstarting the login window results in a runaway SecurityAgent process in macOS 10.15.0 to 10.15.2
+  if [[ ${osversMajor} -eq 10 && ${osversMinor} -ge 15 ]]; then
+    launchctl kickstart -k system/com.apple.loginwindow # kickstarting the login window works but is slower and results in a runaway SecurityAgent process in macOS 10.15
     sleep 0.5
-    killall -9 SecurityAgent # kill the runaway SecurityAgent process
+    killall -HUP SecurityAgent # kill the runaway SecurityAgent process
+  fi
+  if [[ ${osversMajor} -ge 11 ]]; then
+    launchctl kickstart -k system/com.apple.loginwindow
   fi
 fi
 }
@@ -86,11 +89,12 @@ fi
 
 # Start script
 
-osvers=$(sw_vers -productVersion | awk -F. '{print $2}')
+osversMajor=$(sw_vers -productVersion | awk -F. '{print $1}')
+osversMinor=$(sw_vers -productVersion | awk -F. '{print $2}')
 
 # Only proceed if macOS version is 10.13 or higer
-if [[ ${osvers} -le 12 ]]; then
-  echo "macOS version 10.$osvers not supported."
+if [[ ${osversMajor} -eq 10 && ${osversMinor} -le 12 ]]; then
+  echo "macOS version ${osversMajor}.${osversMinor} not supported."
   exit 0
 fi
 
